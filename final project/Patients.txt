@@ -1,6 +1,6 @@
 Name; ID; Allergies
 ========================
-1.Inna Gefen;123456789;none
+1.Inna Gefen;123456789;Sulfa,Latex
 
 Arrival:12/05/1990 22:13
 Dismissed:13/05/1990 06:48
@@ -14,7 +14,7 @@ Duration:
 Doctor:Michal Rappaport
 Summary:Broken finger.
 ========================
-2.Nasreen Hamdi;026547894;none
+2.Nasreen Hamdi;026547894;none
 
 Arrival:29/06/2024 11:04
 Dismissed:
@@ -22,7 +22,7 @@ Duration:
 Doctor:Muhammad Yunus
 Summary:
 ========================
-3.Shuli Abutbul;012345678;Penicillin
+3.Shuli Abutbul;012345678;Penicillin,Anesthetics,Eggs
 
 Arrival:29/06/2024 14:08
 Dismissed:
@@ -30,11 +30,11 @@ Duration:
 Doctor:Muhammad Yunus
 Summary:
 ========================
-4.Michael Shore;203389445;none
+4.Michael Shore;203389445;Penicillin
 
 Arrival:12/02/2011 02:13
 Dismissed:12/02/2011 05:50
-Duration:3:33
+Duration:3:36
 Doctor:Diana Prokonov
 Summary:Fell from a bycicle. Broken arm. In cast.
 
@@ -50,11 +50,11 @@ Duration:
 Doctor:Muhammad Yunus
 Summary:
 ========================
-5.Gali Libovitz;308456713;none
+5.Gali Libovitz;308456713;none
 
 Arrival:02/07/2012 12:33
 Dismissed:03/07/2012 15:12
-Duration:26:37
+Duration:26:38
 Doctor:Hanni Barlev
 Summary:Gallstones.Severe pain.Laproscopic cholecystectomy.
 
@@ -64,19 +64,11 @@ Duration:
 Doctor:David Azrachi
 Summary:
 ========================
-6.Haim Ezer;312488813;none
+6.Haim Ezer;312488813;none
 
 Arrival:29/06/2024 01:17
 Dismissed:
 Duration:
 Doctor:David Azrachi
-Summary:
-========================
-7.Shahar k;323111321;none
-
-Arrival:20/07/2024 18:53
-Dismissed:20/07/2024 18:55
-Duration:0:02
-Doctor:Hanni Barlev
 Summary:
 ========================

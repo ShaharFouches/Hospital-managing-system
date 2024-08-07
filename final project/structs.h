@@ -1,7 +1,6 @@
 #ifndef STRACTS_H
 #define STRACTS_H
 
-
 typedef struct {
 	int Year;
 	int Month;

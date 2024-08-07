@@ -1,26 +1,26 @@
 ﻿  functions.c
-F:\Eden's Project\final project\final project\final project\functions.c(274,31): warning C4133: 'function': incompatible types - from 'plnLine **' to 'plnLine **'
-F:\Eden's Project\final project\final project\final project\functions.c(274,17): warning C4133: '=': incompatible types - from 'plnLine *' to 'plnLine *'
-F:\Eden's Project\final project\final project\final project\functions.c(460,3): warning C4033: 'updateDoctors' must return a value
-F:\Eden's Project\final project\final project\final project\functions.c(474,3): warning C4033: 'updateLine' must return a value
-F:\Eden's Project\final project\final project\final project\functions.c(477,40): warning C4133: '=': incompatible types - from 'plnLine *' to 'plnLine *'
-F:\Eden's Project\final project\final project\final project\functions.c(529,31): warning C4047: 'function': 'int *' differs in levels of indirection from 'int **'
-F:\Eden's Project\final project\final project\final project\functions.c(529,31): warning C4024: 'updatePatients': different types for formal and actual parameter 2
-F:\Eden's Project\final project\final project\final project\functions.c(519,7): warning C4047: 'initializing': 'int *' differs in levels of indirection from 'int'
-F:\Eden's Project\final project\final project\final project\functions.c(703,43): warning C4133: '=': incompatible types - from 'plnLine *' to 'plnLine *'
-F:\Eden's Project\final project\final project\final project\functions.c(708,43): warning C4133: '=': incompatible types - from 'plnLine *' to 'plnLine *'
-F:\Eden's Project\final project\final project\final project\functions.c(785,18): warning C4133: '=': incompatible types - from 'plnLine *' to 'plnLine *'
-F:\Eden's Project\final project\final project\final project\functions.c(820,50): warning C4133: '=': incompatible types - from 'plnLine *' to 'plnLine *'
-F:\Eden's Project\final project\final project\final project\functions.c(825,16): warning C4133: '=': incompatible types - from 'plnLine *' to 'plnLine *'
-F:\Eden's Project\final project\final project\final project\functions.c(821,13): warning C4133: 'initializing': incompatible types - from 'plnLine *' to 'plnLine *'
-F:\Eden's Project\final project\final project\final project\functions.c(860,18): warning C4133: '=': incompatible types - from 'plnLine *' to 'plnLine *'
-F:\Eden's Project\final project\final project\final project\functions.c(879,3): warning C4133: 'return': incompatible types - from 'plnLine *' to 'plnLine *'
-F:\Eden's Project\final project\final project\final project\functions.c(880,47): warning C4133: '=': incompatible types - from 'plnLine *' to 'plnLine *'
-F:\Eden's Project\final project\final project\final project\functions.c(881,12): warning C4133: 'initializing': incompatible types - from 'plnLine *' to 'plnLine *'
-F:\Eden's Project\final project\final project\final project\functions.c(891,18): warning C4133: '=': incompatible types - from 'plnLine *' to 'plnLine *'
-F:\Eden's Project\final project\final project\final project\functions.c(902,43): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-F:\Eden's Project\final project\final project\final project\functions.c(903,39): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
-F:\Eden's Project\final project\final project\final project\functions.c(1116,8): warning C4133: '=': incompatible types - from 'plnLine *' to 'plnLine *'
-F:\Eden's Project\final project\final project\final project\functions.c(468,1): warning C4715: 'updateDoctors': not all control paths return a value
-F:\Eden's Project\final project\final project\final project\functions.c(483,1): warning C4715: 'updateLine': not all control paths return a value
-  final project.vcxproj -> F:\Eden's Project\final project\final project\Debug\final project.exe
+C:\c projects\Hospital managing system\Hospital managing system\final project\functions.c(305,31): warning C4133: 'function': incompatible types - from 'plnLine **' to 'plnLine **'
+C:\c projects\Hospital managing system\Hospital managing system\final project\functions.c(305,17): warning C4133: '=': incompatible types - from 'plnLine *' to 'plnLine *'
+C:\c projects\Hospital managing system\Hospital managing system\final project\functions.c(491,3): warning C4033: 'updateDoctors' must return a value
+C:\c projects\Hospital managing system\Hospital managing system\final project\functions.c(505,3): warning C4033: 'updateLine' must return a value
+C:\c projects\Hospital managing system\Hospital managing system\final project\functions.c(508,40): warning C4133: '=': incompatible types - from 'plnLine *' to 'plnLine *'
+C:\c projects\Hospital managing system\Hospital managing system\final project\functions.c(560,31): warning C4047: 'function': 'int *' differs in levels of indirection from 'int **'
+C:\c projects\Hospital managing system\Hospital managing system\final project\functions.c(560,31): warning C4024: 'updatePatients': different types for formal and actual parameter 2
+C:\c projects\Hospital managing system\Hospital managing system\final project\functions.c(550,7): warning C4047: 'initializing': 'int *' differs in levels of indirection from 'int'
+C:\c projects\Hospital managing system\Hospital managing system\final project\functions.c(758,43): warning C4133: '=': incompatible types - from 'plnLine *' to 'plnLine *'
+C:\c projects\Hospital managing system\Hospital managing system\final project\functions.c(763,43): warning C4133: '=': incompatible types - from 'plnLine *' to 'plnLine *'
+C:\c projects\Hospital managing system\Hospital managing system\final project\functions.c(840,18): warning C4133: '=': incompatible types - from 'plnLine *' to 'plnLine *'
+C:\c projects\Hospital managing system\Hospital managing system\final project\functions.c(889,50): warning C4133: '=': incompatible types - from 'plnLine *' to 'plnLine *'
+C:\c projects\Hospital managing system\Hospital managing system\final project\functions.c(894,16): warning C4133: '=': incompatible types - from 'plnLine *' to 'plnLine *'
+C:\c projects\Hospital managing system\Hospital managing system\final project\functions.c(890,13): warning C4133: 'initializing': incompatible types - from 'plnLine *' to 'plnLine *'
+C:\c projects\Hospital managing system\Hospital managing system\final project\functions.c(929,20): warning C4133: '=': incompatible types - from 'plnLine *' to 'plnLine *'
+C:\c projects\Hospital managing system\Hospital managing system\final project\functions.c(948,3): warning C4133: 'return': incompatible types - from 'plnLine *' to 'plnLine *'
+C:\c projects\Hospital managing system\Hospital managing system\final project\functions.c(949,47): warning C4133: '=': incompatible types - from 'plnLine *' to 'plnLine *'
+C:\c projects\Hospital managing system\Hospital managing system\final project\functions.c(950,12): warning C4133: 'initializing': incompatible types - from 'plnLine *' to 'plnLine *'
+C:\c projects\Hospital managing system\Hospital managing system\final project\functions.c(960,18): warning C4133: '=': incompatible types - from 'plnLine *' to 'plnLine *'
+C:\c projects\Hospital managing system\Hospital managing system\final project\functions.c(971,43): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\c projects\Hospital managing system\Hospital managing system\final project\functions.c(972,39): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+C:\c projects\Hospital managing system\Hospital managing system\final project\functions.c(1187,8): warning C4133: '=': incompatible types - from 'plnLine *' to 'plnLine *'
+C:\c projects\Hospital managing system\Hospital managing system\final project\functions.c(499): warning C4715: 'updateDoctors': not all control paths return a value
+C:\c projects\Hospital managing system\Hospital managing system\final project\functions.c(514): warning C4715: 'updateLine': not all control paths return a value
+  final project.vcxproj -> C:\c projects\Hospital managing system\Hospital managing system\Debug\final project.exe

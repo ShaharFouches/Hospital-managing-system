@@ -1,15 +1,52 @@
 ﻿#define _CRT_SECURE_NO_WARNINGS
 
 #include "functions.h"
- 
-#define NONE 0
-#define PENICILLIN 1
-#define SULFA 2
-#define OPIOIDS 4
-#define ANESTHETICS 8
-#define EGGS 16
-#define LATEX 32
-#define PRESERVATIVES 64
+
+
+int menu()
+{
+	char* options[] = {
+		"1 - Admit patient",
+		"2 - Check for patient's allergies",
+		"3 - Display all patients",
+		"4 - Display all patient's admissions",
+		"5 - Display all patients in line",
+		"6 - Advance patient in line",
+		"7 - Display list of doctors",
+		"8 - Display all patients assigned to a doctor",
+		"9 - Discharge patient",
+		"10 - Remove visit",
+		"11 - Remove patient",
+		"12 - Close the hospital" ,
+		"0 - Exit Program"
+	};
+
+	printf("Please choose an option:\n");
+	int option_size = sizeof(options) / sizeof(options[0]);
+	for (int i = 0; i < option_size; i++)
+		printf("%s\n", options[i]);
+
+	int choice;
+	printf("User's choice: ");
+	if (scanf("%d", &choice) != 1) {
+		printf("Invalid input. Please enter a number.\n");
+		while (getchar() != '\n');
+		return -1;
+	}
+
+	if (choice < 0 || choice > 12) {
+		printf("Invalid choice. Please choose a number between 0 and %d.\n", option_size - 1);
+		return -1;
+	}
+	printf("\n");
+	flushStdin();
+	return choice;
+}
+
+void flushStdin() {
+	int c;
+	while ((c = getchar()) != '\n' && c != EOF);
+}
 
 void displayError(char* error) {
 	fprintf(stderr, "%s", error);
@@ -31,6 +68,24 @@ char sumAllergies(char* str) {
 		}
 		str = strtok(NULL, ",");
 	}
+	return res;
+}
+
+char sumAllergiesFromNumbers(char* str) {
+	str = strtok(str, ",");
+	char res = 0;
+	char aller_vals[] = { NONE,PENICILLIN,SULFA,OPIOIDS,ANESTHETICS,EGGS,LATEX,PRESERVATIVES };
+
+	while (str != NULL) {
+		int index = str[0] - '0';
+
+		if (index >= 0 && index <= 7) {
+			res += aller_vals[index];
+		}
+
+		str = strtok(NULL, ",");
+	}
+
 	return res;
 }
 
@@ -217,10 +272,10 @@ pTree* loadPatients(ll** head, char* filePath) {
 		if (strstr(buffer, "Duration") != NULL) {
 			char* token = strtok(buffer, ":");
 			token = strtok(NULL, "\n");
-			if (token != NULL)
+			if (token != NULL && strcmp(token, "-1:00") != 0)
 				tempV->Duration = getDuration(token);
 			else
-				tempV->Duration = 0;
+				tempV->Duration = -1;
 		}
 		if (strstr(buffer, "Doctor") != NULL) {
 			char* token = strtok(buffer, ":");
@@ -247,7 +302,7 @@ void append(ll** curr, Doc** tempD) {
 		*curr = (ll*)malloc(sizeof(ll));
 		if (*curr == NULL)
 		{
-			printf("allocation failed\n");
+			printf("memory allocation failed.\n");
 			return;
 		}
 		(*curr)->doc = *tempD;
@@ -383,7 +438,7 @@ char* extractAller(char aller) {
 	}
 	if (strcmp(res, "") == 0)
 		res = _strdup("none");
-	strcat(res, "\r\n");
+	strcat(res, "\n");
 	return res;
 }
 
@@ -431,7 +486,7 @@ void updatePatient(Patient* p, int* num) {
 			fprintf(file,"Dismissed:\n");
 		fprintf(file, "Duration:");
 		fflush(file);
-		if (tempV->Duration != 0)
+		if (tempV->Duration != -1)
 			writeDuration2File(tempV->Duration, "Patients.txt");
 		else
 			fprintf(file, "\n");
@@ -457,7 +512,7 @@ int updateDoctors(ll* head) {
 	FILE* file = fopen("Doctors.txt", "a");
 	if (file == NULL) {
 		perror("Error opening file");
-		return;
+		return ;
 	}
 	for (ll* curr = head; curr; curr = curr->next) {
 		fprintf(file, "%s; %s; %d\n", curr->doc->Name, curr->doc->nLicense, curr->doc->nPatients);
@@ -567,7 +622,9 @@ char* getId() {
 		printf("Memory allocation failed\n");
 		exit(1);
 	}
+	
 	while (1) {
+		int whileBreak = 0;
 		printf("Please enter ID number: ");
 		if (scanf("%9s", id) != 1) {
 			printf("Invalid id number\n");
@@ -578,8 +635,21 @@ char* getId() {
 			printf("ID must be exactly 9 characters long\n");
 			continue;
 		}
-		break;
+		for (int i = 0; i < 9; i++)
+		{
+			if (id[i]>'9' || id[i]<'0')
+			{
+				printf("invalid id, please enter only numbers\n");
+				whileBreak = 1;
+				break;
+			}
+		}
+		if (whileBreak==0)
+		{
+			break;
+		}	
 	}
+	flushStdin();
 	return id;
 }
 
@@ -627,24 +697,64 @@ void editName(Patient* p) {
 	strcpy(p->Name, name);
 }
 
+int validAllerInput(char* str) {
+	for (char* i = str + 1; *i != '\0'; i += 2)
+		if (*i != ',') {
+			displayError("Invalid format please try again\n");
+			return 0;
+		}
+	return 1;
+}
+
+int checkDups(char* str) {
+	int seen[8] = { 0 };
+
+	char tempStr[16];
+	strcpy(tempStr, str);
+
+	char* token = strtok(tempStr, ",");
+	while (token != NULL) {
+		int index = token[0] - '0';
+
+		if (index < 0 || index >= 8) {
+			printf("Invalid number in input string: %d\n", index);
+			return 1;
+		}
+
+		if (seen[index]) {
+			displayError("There is a duplicate in the format");
+			return 1;
+		}
+		seen[index] = 1;
+		token = strtok(NULL, ",");
+	}
+	return 0;
+}
+
 void editAllergies(Patient* p) {
 	char* allergies[] = { "none","Penicillin","Sulfa","Opioids",
 			"Anesthetics","Eggs","Latex","Preservatives" };
 
 	printf("Out of this list please select all allergies you know of\n");
-	printf("in the format like this Sulfa,Eggs,Latex...\n");
+	printf("Enter numbers from 0 to 7 in this format 0,1,2... \n");
 	int aller_size = sizeof(allergies) / sizeof(allergies[0]);
-	char aller[72];
+	char aller[16];
 	for (int i = 0; i < aller_size; i++)
 		printf("%d - %s\n",i, allergies[i]);
 
-	if (scanf("%s", aller) != 1)
+	if (scanf("%s", aller) != 1 || !validAllerInput(aller) || checkDups(aller))
 		editAllergies(p);
-	p->Allergies = sumAllergies(aller);
+	
+	p->Allergies = sumAllergiesFromNumbers(aller);
 }
 
 Patient* registerNewPatient(plnTree* root, char* id) {
 	Patient* tempP = (Patient*)malloc(sizeof(Patient));
+	if (tempP == NULL)
+	{
+		printf("Memory allocation failed.");
+		return NULL;
+	}
 	tempP->ID = id;
 	editName(tempP);
 	editAllergies(tempP);
@@ -663,6 +773,11 @@ int activeVisit(Stack* visits) {
 
 Visit* createNewVisit(ll* head) {
 	Visit* tempV = (Visit*)malloc(sizeof(Visit));
+	if (tempV== NULL)
+	{
+		printf("Memory allocation failed.");
+		return NULL;
+	}
 	Date* tempD = getDate(getTime());
 	tempV->tArrival = tempD;
 	tempV->tDismissed = NULL;
@@ -690,7 +805,7 @@ plnLine* admitPatient(plnTree* root , ll* head, plnLine* line) {
 	Visit* tempV = createNewVisit(head);
 	tempP->Visits = Push(tempP->Visits ,tempV);
 	tempP->nVisits++;
-	printf("\n");
+	printf("Patient admited successfuly\n\n");
 	return insertAtEnd(&line, &tempP);
 
 }
@@ -703,18 +818,23 @@ void checkForAllergies(plnLine* line) {
 	for (plnLine* tempL = line; tempL; tempL = tempL->next) {
 		printf("%s\n",tempL->lpatient->ID);
 	}
-	char* id = getId();
+	printf("\n");
 	Patient* tempP = NULL;
-	for (plnLine* tempL = line; tempL; tempL = tempL->next) 
-		if (strcmp(tempL->lpatient->ID, id) == 0) {
-			tempP = tempL->lpatient;
-			break;
-		}
 
-	if (tempP == NULL) {
-		printf("No such patient in line\n");
-		return;
+	while (tempP == NULL) {
+		char* id = getId();
+
+		for (plnLine* tempL = line; tempL; tempL = tempL->next)
+			if (strcmp(tempL->lpatient->ID, id) == 0) {
+				tempP = tempL->lpatient;
+				break;
+			}
+		if (tempP == NULL) 
+			printf("No such patient in line\n");
+		
 	}
+
+
 	printf("%s\n",extractAller(tempP->Allergies));
 	return;
 }
@@ -734,12 +854,13 @@ void displayPatientAdmissions(plnTree* root) {
 	printf("\n");
 	displayAllPatients(root);
 	printf("\n");
-
-	char* id = getId();
-	Patient* tempP = searchPatient(root,id);
-	if (tempP == NULL) {
-		printf("No patient is registered under this ID\n");
-		return;
+	Patient* tempP = NULL;
+	
+	while (tempP == NULL) {
+		char* id = getId();
+		tempP = searchPatient(root, id);
+		if (tempP == NULL) 
+			printf("No patient is registered under this ID\n");
 	}
 
 	if (tempP->Visits == NULL) {
@@ -795,24 +916,12 @@ void displayPatientsInLine(plnLine* line,int extenedInfo) {
 plnLine* advancePatientInLine(plnLine* line) {
 	printf("Current patients in line:\n");
 	displayPatientsInLine(line,0);
-	printf("Please enter the patient's ID you want to advance in line: ");
-
-	char id[10];
-	while (1) {
-		if (scanf("%9s", &id) != 1) {
-			printf("Invalid id number\nPlease enter a valid ID: ");
-			continue;
-		}
-		size_t len = strlen(id);
-		if (len != 9) {
-			printf("ID must be exactly 9 characters long\n");
-			continue;
-		}
-		break;
-	}
-
+	printf("Please enter the patient's ID you want to advance in line\n");
+	char* id = getId();
+	int found = 0;
 	Patient* tempP = NULL;
-	if (strcmp(line->lpatient->ID, id) == 0) {
+	
+	if (strcmp(line->lpatient->ID, id) == 0 ) {
 		printf("Patient is already in the front of the line\n");
 		return line;
 	}
@@ -824,9 +933,15 @@ plnLine* advancePatientInLine(plnLine* line) {
 				tempL->next = next->next;
 				next->next = line;
 				line = next;
+				found = 1;
 				break;
 			}
 		}
+
+	if (found == 0) {
+		displayError("No such patient in line please try again\n\n");
+		return advancePatientInLine(line);
+	}
 	printf("The updated line is:\n");
 	displayPatientsInLine(line,0);
 	return line;
@@ -847,17 +962,21 @@ void displayPatientsToDoctor(plnLine* line, ll* head) {
 	char docName2[26];
 	printf("Please enter the doctor's name: ");
 	while (1) {
-		scanf("%s %s", docName1,docName2);
+		scanf("%s %s", docName1, docName2);
 		if (!isValidString(docName1) || !isValidString(docName2)) {
-			printf("Doctor's name is invalid\n Please enter a valid name: ");
+			printf("Doctor's name is invalid\nPlease enter a valid name: ");
 			continue;
 		}
 		break;
 	}
-	char* docName = strcat(docName1," ");
-	docName = strcat(docName,docName2);
-	printf("\n%s patient's information:\n^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^\n\n",docName);
-	for (;line;line = line->next) {
+	char* docName = strcat(docName1, " ");
+	docName = strcat(docName, docName2);
+	if (getDoc(head, docName) == NULL) {
+		displayError("No such doctor please try again\n\n");
+		displayPatientsToDoctor(line, head);
+	}
+	printf("\n%s patient's information:\n^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^\n\n", docName);
+	for (; line; line = line->next) {
 		Patient* tempP = line->lpatient;
 		Visit* currV = tempP->Visits->visit;
 		if (currV == NULL || currV->tDismissed != NULL)
@@ -869,7 +988,7 @@ void displayPatientsToDoctor(plnLine* line, ll* head) {
 			printf("%02d:%02d\n\n", currV->tArrival->Hour, currV->tArrival->Min);
 		}
 	}
-	printf("^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^\n\n");
+	printf("^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^\n\n");
 }
 
 plnLine* removeFromLine(plnLine* line, char* id) {
@@ -935,6 +1054,13 @@ plnLine* dischargePatient(plnLine* line) {
 	return line;
 }
 
+int isSingleDigit(char* c) {
+	if (*(c + 1) == '\0')
+		return 1;
+	else
+		return 0;
+}
+
 Visit* getSpecificVisit(Patient* p) {
 	printf("Please select a date for a visit you want to remove from the list below:\n");
 	int i = 1;
@@ -943,18 +1069,23 @@ Visit* getSpecificVisit(Patient* p) {
 		printf("%d - %02d/%02d/%02d\n",i,tempD->Day,tempD->Month,tempD->Year);
 	}
 	printf("\nUser's choise: ");
+
+	char input[18];
 	int choice;
 	while (1) {
-		if (scanf("%d", &choice) != 1) {
-			printf("Invalid input\n Please enter a number:");
+		if (scanf("%s", &input) != 1 || !isSingleDigit(input)) {
+			printf("Invalid input\nPlease enter a number:");
+			flushStdin();
 			continue;
 		}
+		choice = *input - 48;
 		if (choice >= i || choice <= 0) {
 			printf("Choice out of bounds please choose again:");
 			continue;
 		}
 		break;
 	}
+
 	Stack* tempS = p->Visits;
 	i--;
 	for (;i > choice;tempS = tempS->next, i--);
@@ -980,16 +1111,24 @@ void removeVisit(plnTree* root) {
 	displayAllPatients(root);
 	printf("\n");
 
-	char* id = getId();
-	Patient* tempP = searchPatient(root,id);
-	if (tempP == NULL) {
-		printf("There is no such patient in records\n");
+	Patient* tempP = NULL;
+	char* id;
+
+	while (tempP == NULL) {
+		id = getId();
+		tempP = searchPatient(root, id);
+		if (tempP == NULL) 
+			displayError("There is no such patient in records\n");
+	}
+	
+	if (tempP->nVisits == 0) {
+		printf("The patients have no visits to remove\n\n");
 		return;
 	}
 	Visit* visit = getSpecificVisit(tempP);
 	removeFromStack(tempP,visit);
 
-	printf("\nThe remaining visits on record for %s\n",id);
+	printf("\nThe remaining visits on record for %s is : %d\n",id,tempP->nVisits);
 	for (Stack* tempS = tempP->Visits;tempS;tempS = tempS->next) {
 		Visit* tempV = tempS->visit;
 		Date* arrival = tempV->tArrival;
@@ -1056,6 +1195,7 @@ void removePatient(pTree* tree, pLine* line) {
 	}
 	line->myLine = removeFromLine(line->myLine,id);
 	tree->myTree = removeFromTree(tree->myTree,tempP);
+	printf("%s has been removed succsesfully\n",id);
 	
 }
 
@@ -1147,3 +1287,4 @@ void freeAll(ll* docList, pTree* tree, pLine* line) {
 	freeLL(docList);
 	freePLine(line);
 }
+

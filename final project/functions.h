@@ -1,12 +1,10 @@
 #ifndef FUNCTIONS_H
 #define FUNCTIONS_H
-
-#define _CRT_SECURE_NO_WARNINGS
+#include "structs.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
-#include "structs.h"
 
 #define NONE 0
 #define PENICILLIN 1
@@ -17,9 +15,11 @@
 #define LATEX 32
 #define PRESERVATIVES 64
 
-
+int menu();
+void flushStdin();
 void displayError(char* error);
 char sumAllergies(char* str);
+char sumAllergiesFromNumbers(char* str);
 void enterToTree(plnTree** currNode, Patient* tempP);
 int isValidString(const char* str);
 int extractNum(char* str);
@@ -44,6 +44,9 @@ int updateDoctors(ll* head);
 int updateLine(plnLine* line);
 void updateFiles(pTree* tree, pLine* line, ll** head);
 void assignDoctor2case(ll* ll,Visit* p);
+void editName(Patient* p);
+int validAllerInput(char* str);
+int checkDups(char* str);
 int isFull(ll* head);
 void editAllergies(Patient* p);
 Patient* registerNewPatient(plnTree* root, char* id);
@@ -55,6 +58,7 @@ char* getId();
 void checkForAllergies(plnLine* line);
 void displayAllPatients(plnTree* root);
 void displayPatientAdmissions(plnTree* root);
+void printCurrVisit(Patient* tempP);
 void displayPatientsInLine(plnLine* line, int extenedInfo);
 plnLine* advancePatientInLine(plnLine* line);
 void displayDoctors(ll* head);
@@ -63,6 +67,7 @@ plnLine* removeFromLine(plnLine* line, char* id);
 Patient* searchInLine(plnLine* line, char* id);
 float calcDuration(Date* arrival, Date* dismiss);
 plnLine* dischargePatient(plnLine* line);
+int isSingleDigit(int c);
 Visit* getSpecificVisit(Patient* p);
 void removeFromStack(Patient* p, Visit* v);
 void removeVisit(plnTree* root);
